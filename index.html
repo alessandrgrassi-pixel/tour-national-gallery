@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Tour National Gallery - Potere, Gloria e Disastri Epici</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 30px;
+            border-radius: 15px;
+            margin-top: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-box .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-box .label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .season {
+            margin: 20px;
+        }
+
+        .season-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .season-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .season-header h2 {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .season-count {
+            background: rgba(255,255,255,0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .artwork-list {
+            display: none;
+        }
+
+        .artwork-list.active {
+            display: block;
+        }
+
+        .artwork-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .artwork-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .artwork-item.completed {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #4CAF50;
+        }
+
+        .artwork-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .checkbox {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .artwork-item.completed .checkbox {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .artwork-info {
+            flex: 1;
+        }
+
+        .artwork-number {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        .artwork-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .artwork-room {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .artwork-details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #e0e0e0;
+        }
+
+        .artwork-item.expanded .artwork-details {
+            display: block;
+        }
+
+        .netflix-tag {
+            display: inline-block;
+            background: #E50914;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            margin: 10px 5px 5px 0;
+            font-weight: bold;
+        }
+
+        .fun-fact {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .notes-section {
+            margin: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .notes-section h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .notes-section input,
+        .notes-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .notes-section input:focus,
+        .notes-section textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .notes-section textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .save-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .save-button:active {
+            transform: translateY(0);
+        }
+
+        .floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .reset-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .reset-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .modal-buttons .confirm {
+            background: #f44336;
+            color: white;
+        }
+
+        .modal-buttons .cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .celebration {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            z-index: 3000;
+            animation: popup 0.5s ease;
+        }
+
+        .celebration.active {
+            display: block;
+        }
+
+        @keyframes popup {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .celebration h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .celebration p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+            }
+            
+            .container {
+                border-radius: 0;
+            }
+            
+            .floating-buttons {
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .fab {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 POTERE, GLORIA E DISASTRI EPICI</h1>
+            <p>National Gallery Tour Interattivo</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar">0/15</div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="number" id="completedCount">0</div>
+                <div class="label">Completate</div>
+            </div>
+            <div class="stat-box">
+                <div class="number" id="remainingCount">15</div>
+                <div class="label">Rimanenti</div>
+            </div>
+            <div class="stat-box">
+                <div class="number" id="progressPercent">0%</div>
+                <div class="label">Progresso</div>
+            </div>
+        </div>
+
+        <!-- STAGIONE 1 -->
+        <div class="season">
+            <div class="season-header" onclick="toggleSeason(1)">
+                <h2>🟡 STAGIONE 1: L'ERA DELLA SPADA E DELL'ORO</h2>
+                <span class="season-count" id="season1-count">0/3</span>
+            </div>
+            <div class="artwork-list" id="season1">
+                <div class="artwork-item" data-id="1" onclick="toggleArtwork(1)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">1️⃣</span>
+                                Battaglia di San Romano ⚔️
+                            </div>
+                            <div class="artwork-room">📍 Sala 54 • Paolo Uccello</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">🎮 ARCANE</span>
+                        <span class="netflix-tag">🌊 AVATAR</span>
+                        <div class="fun-fact">
+                            <strong>🎯 Challenge:</strong> Conta quanti cavalli vedi! Uccello era ossessionato dalla prospettiva 3D - la CGI del 1400!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="2" onclick="toggleArtwork(2)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">2️⃣</span>
+                                Trittico Wilton 👑
+                            </div>
+                            <div class="artwork-room">📍 Sala 53 • Artista Anonimo</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">💎 BRIDGERTON</span>
+                        <span class="netflix-tag">⚔️ THE WITCHER</span>
+                        <div class="fun-fact">
+                            <strong>🔍 Easter Egg:</strong> Trova la mini-Inghilterra nascosta nella sfera dorata! È dipinto in ORO VERO!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="3" onclick="toggleArtwork(3)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">3️⃣</span>
+                                Ritratto Arnolfini 🪞
+                            </div>
+                            <div class="artwork-room">📍 Sala 56 • Jan van Eyck</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">👻 STRANGER THINGS</span>
+                        <span class="netflix-tag">🖤 WEDNESDAY</span>
+                        <div class="fun-fact">
+                            <strong>🤯 Mind Blown:</strong> Guarda lo specchio! Chi è riflesso? Il primo selfie Easter egg della storia!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGIONE 2 -->
+        <div class="season">
+            <div class="season-header" onclick="toggleSeason(2)">
+                <h2>🟢 STAGIONE 2: RINASCIMENTO - DEI E GENI</h2>
+                <span class="season-count" id="season2-count">0/3</span>
+            </div>
+            <div class="artwork-list" id="season2">
+                <div class="artwork-item" data-id="4" onclick="toggleArtwork(4)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">4️⃣</span>
+                                Vergine delle Rocce 🏔️
+                            </div>
+                            <div class="artwork-room">📍 Sala 51a/66 • Leonardo da Vinci</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">👻 STRANGER THINGS</span>
+                        <span class="netflix-tag">🌊 AVATAR</span>
+                        <div class="fun-fact">
+                            <strong>🧠 Genio Alert:</strong> Leonardo = Tony Stark originale! Questa grotta sembra il Sottosopra!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="5" onclick="toggleArtwork(5)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">5️⃣</span>
+                                Bacco e Arianna 🎉
+                            </div>
+                            <div class="artwork-room">📍 Sala 2 • Tiziano</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">🏝️ OUTER BANKS</span>
+                        <span class="netflix-tag">☂️ UMBRELLA ACADEMY</span>
+                        <span class="netflix-tag">💎 BRIDGERTON</span>
+                        <div class="fun-fact">
+                            <strong>🚀 Glow-Up Epico:</strong> Da ghostata su un'isola a DEA immortale! Bacco sta letteralmente VOLANDO!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="6" onclick="toggleArtwork(6)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">6️⃣</span>
+                                Gli Ambasciatori 💀
+                            </div>
+                            <div class="artwork-room">📍 Sala 4 • Hans Holbein il Giovane</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">🖤 WEDNESDAY</span>
+                        <span class="netflix-tag">👻 STRANGER THINGS</span>
+                        <div class="fun-fact">
+                            <strong>💀 Memento Mori:</strong> Trova l'angolo giusto per vedere il teschio anamorf ico! Realtà distorta!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGIONE 3 -->
+        <div class="season">
+            <div class="season-header" onclick="toggleSeason(3)">
+                <h2>🔵 STAGIONE 3: BAROCCO - TRADIMENTO E DRAMA</h2>
+                <span class="season-count" id="season3-count">0/3</span>
+            </div>
+            <div class="artwork-list" id="season3">
+                <div class="artwork-item" data-id="7" onclick="toggleArtwork(7)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">7️⃣</span>
+                                Cena in Emmaus 🕯️
+                            </div>
+                            <div class="artwork-room">📍 Sala 32 • Caravaggio</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">👻 STRANGER THINGS</span>
+                        <span class="netflix-tag">🏝️ OUTER BANKS</span>
+                        <div class="fun-fact">
+                            <strong>🎬 Plot Twist:</strong> Caravaggio = il Tarantino del 1600! Luci drammatiche come Stranger Things!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="8" onclick="toggleArtwork(8)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">8️⃣</span>
+                                Sansone e Dalila 💇‍♂️
+                            </div>
+                            <div class="artwork-room">📍 Sala 29 • Rubens</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">🏝️ OUTER BANKS</span>
+                        <span class="netflix-tag">⚔️ THE WITCHER</span>
+                        <span class="netflix-tag">🛡️ VIKINGS</span>
+                        <div class="fun-fact">
+                            <strong>😱 Betrayal Alert:</strong> Ward Cameron level! Mai fidarsi troppo - anche Hulk può cadere!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="9" onclick="toggleArtwork(9)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">9️⃣</span>
+                                Carlo I a Cavallo 👑
+                            </div>
+                            <div class="artwork-room">📍 Sala 31 • Van Dyck</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">☂️ UMBRELLA ACADEMY</span>
+                        <span class="netflix-tag">🛡️ VIKINGS</span>
+                        <div class="fun-fact">
+                            <strong>💔 Tragic Ending:</strong> 8 anni dopo questo quadro = decapitato! Wrong timeline, bro!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGIONE 4 -->
+        <div class="season">
+            <div class="season-header" onclick="toggleSeason(4)">
+                <h2>🔴 STAGIONE 4: ETÀ MODERNA - EROI CADUTI</h2>
+                <span class="season-count" id="season4-count">0/6</span>
+            </div>
+            <div class="artwork-list" id="season4">
+                <div class="artwork-item" data-id="10" onclick="toggleArtwork(10)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">🔟</span>
+                                Fighting Temeraire ⚓
+                            </div>
+                            <div class="artwork-room">📍 Sala 34 • J.M.W. Turner</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">👻 STRANGER THINGS</span>
+                        <span class="netflix-tag">🎮 ARCANE</span>
+                        <div class="fun-fact">
+                            <strong>😢 F in Chat:</strong> Eroe che va in pensione. Fine di un'era tipo finale di Stranger Things!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="11" onclick="toggleArtwork(11)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">1️⃣1️⃣</span>
+                                The Hay Wain 🌳
+                            </div>
+                            <div class="artwork-room">📍 Sala 34 • John Constable</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">💕 HEARTSTOPPER</span>
+                        <span class="netflix-tag">💎 BRIDGERTON</span>
+                        <div class="fun-fact">
+                            <strong>😌 Chill Vibes:</strong> Episodio filler wholesome dopo tutto il drama!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="12" onclick="toggleArtwork(12)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">1️⃣2️⃣</span>
+                                Mr & Mrs Andrews 🏛️
+                            </div>
+                            <div class="artwork-room">📍 Sala 34 • Thomas Gainsborough</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">🏝️ OUTER BANKS</span>
+                        <span class="netflix-tag">💎 BRIDGERTON</span>
+                        <div class="fun-fact">
+                            <strong>💰 Kooks Originali:</strong> I ricchi proprietari terrieri - Kooks vs Pogues del 1700!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="13" onclick="toggleArtwork(13)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">1️⃣3️⃣</span>
+                                Lady Jane Grey 👸
+                            </div>
+                            <div class="artwork-room">📍 Sala 45 • Paul Delaroche</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">🏝️ OUTER BANKS</span>
+                        <span class="netflix-tag">💎 BRIDGERTON</span>
+                        <span class="netflix-tag">🖤 WEDNESDAY</span>
+                        <div class="fun-fact">
+                            <strong>😭 Most Tragic:</strong> 17 anni, regina per 9 giorni, poi decapitata. Tipo Sansa Stark!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="14" onclick="toggleArtwork(14)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">1️⃣4️⃣</span>
+                                Girasoli 🌻
+                            </div>
+                            <div class="artwork-room">📍 Sala 43 • Vincent van Gogh</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">🖤 WEDNESDAY</span>
+                        <span class="netflix-tag">👻 STRANGER THINGS</span>
+                        <span class="netflix-tag">☂️ UMBRELLA ACADEMY</span>
+                        <div class="fun-fact">
+                            <strong>🚀 Ultimate Glow-Up:</strong> Da fallito povero a leggenda da $100M! Outsider geniale!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="artwork-item" data-id="15" onclick="toggleArtwork(15)">
+                    <div class="artwork-header">
+                        <div class="checkbox"></div>
+                        <div class="artwork-info">
+                            <div class="artwork-title">
+                                <span class="artwork-number">1️⃣5️⃣</span>
+                                Le Ninfee 🌸
+                            </div>
+                            <div class="artwork-room">📍 Sala 43 • Claude Monet</div>
+                        </div>
+                    </div>
+                    <div class="artwork-details">
+                        <span class="netflix-tag">🌊 AVATAR</span>
+                        <span class="netflix-tag">⚔️ THE WITCHER</span>
+                        <span class="netflix-tag">🎮 ARCANE</span>
+                        <div class="fun-fact">
+                            <strong>🎨 World Builder:</strong> Monet creò il SUO mondo! Test: guardalo da vicino poi da lontano!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEZIONE NOTE -->
+        <div class="notes-section">
+            <h3>📝 Le Mie Note</h3>
+            <input type="text" id="favoriteArtwork" placeholder="🎨 Il mio episodio preferito...">
+            <input type="text" id="netflixSeries" placeholder="📺 Serie Netflix che mi ricorda...">
+            <textarea id="personalNotes" placeholder="💭 Note personali e riflessioni..."></textarea>
+            <button class="save-button" onclick="saveNotes()">💾 Salva le Mie Note</button>
+        </div>
+    </div>
+
+    <!-- FLOATING BUTTONS -->
+    <div class="floating-buttons">
+        <button class="fab" onclick="showResetModal()" title="Reset Tour">🔄</button>
+        <button class="fab" onclick="scrollToTop()" title="Torna Su">⬆️</button>
+    </div>
+
+    <!-- RESET MODAL -->
+    <div class="reset-modal" id="resetModal">
+        <div class="modal-content">
+            <h3>🔄 Reset Tour?</h3>
+            <p>Vuoi davvero resettare tutto il progresso? Questa azione non può essere annullata!</p>
+            <div class="modal-buttons">
+                <button class="cancel" onclick="closeResetModal()">Annulla</button>
+                <button class="confirm" onclick="confirmReset()">Reset Tutto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CELEBRATION MODAL -->
+    <div class="celebration" id="celebration">
+        <h2>🎉 CONGRATULAZIONI! 🎉</h2>
+        <p>Hai completato il tour!<br>Sei un vero esperto d'arte!</p>
+        <p style="margin-top: 20px; font-size: 14px;">
+            15/15 opere visitate<br>
+            🏆 Achievement Unlocked: Art Master!
+        </p>
+        <button class="save-button" style="margin-top: 20px;" onclick="closeCelebration()">Chiudi</button>
+    </div>
+
+    <script>
+        // Load saved data
+        let completedArtworks = JSON.parse(localStorage.getItem('completedArtworks')) || [];
+        let expandedArtworks = [];
+
+        // Initialize on load
+        window.onload = function() {
+            loadSavedData();
+            updateStats();
+            openFirstSeason();
+        };
+
+        function openFirstSeason() {
+            toggleSeason(1);
+        }
+
+        function loadSavedData() {
+            // Load completed artworks
+            completedArtworks.forEach(id => {
+                const artwork = document.querySelector(`[data-id="${id}"]`);
+                if (artwork) {
+                    artwork.classList.add('completed');
+                    const checkbox = artwork.querySelector('.checkbox');
+                    checkbox.innerHTML = '✓';
+                }
+            });
+
+            // Load notes
+            document.getElementById('favoriteArtwork').value = localStorage.getItem('favoriteArtwork') || '';
+            document.getElementById('netflixSeries').value = localStorage.getItem('netflixSeries') || '';
+            document.getElementById('personalNotes').value = localStorage.getItem('personalNotes') || '';
+        }
+
+        function toggleSeason(seasonNum) {
+            const seasonList = document.getElementById(`season${seasonNum}`);
+            seasonList.classList.toggle('active');
+        }
+
+        function toggleArtwork(artworkId) {
+            const artwork = document.querySelector(`[data-id="${artworkId}"]`);
+            const checkbox = artwork.querySelector('.checkbox');
+            
+            // Toggle expanded state
+            if (event.target.closest('.artwork-header')) {
+                artwork.classList.toggle('expanded');
+            }
+            
+            // Toggle completion
+            if (event.target === checkbox || event.target.closest('.checkbox')) {
+                event.stopPropagation();
+                
+                if (artwork.classList.contains('completed')) {
+                    artwork.classList.remove('completed');
+                    checkbox.innerHTML = '';
+                    completedArtworks = completedArtworks.filter(id => id !== artworkId);
+                } else {
+                    artwork.classList.add('completed');
+                    checkbox.innerHTML = '✓';
+                    completedArtworks.push(artworkId);
+                    
+                    // Check if all completed
+                    if (completedArtworks.length === 15) {
+                        setTimeout(showCelebration, 500);
+                    }
+                }
+                
+                localStorage.setItem('completedArtworks', JSON.stringify(completedArtworks));
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            const completed = completedArtworks.length;
+            const remaining = 15 - completed;
+            const percent = Math.round((completed / 15) * 100);
+            
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('remainingCount').textContent = remaining;
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressBar').textContent = `${completed}/15`;
+            document.getElementById('progressBar').style.width = percent + '%';
+            
+            // Update season counts
+            updateSeasonCount(1, [1, 2, 3]);
+            updateSeasonCount(2, [4, 5, 6]);
+            updateSeasonCount(3, [7, 8, 9]);
+            updateSeasonCount(4, [10, 11, 12, 13, 14, 15]);
+        }
+
+        function updateSeasonCount(seasonNum, artworkIds) {
+            const completed = artworkIds.filter(id => completedArtworks.includes(id)).length;
+            const total = artworkIds.length;
+            document.getElementById(`season${seasonNum}-count`).textContent = `${completed}/${total}`;
+        }
+
+        function saveNotes() {
+            const favorite = document.getElementById('favoriteArtwork').value;
+            const netflix = document.getElementById('netflixSeries').value;
+            const notes = document.getElementById('personalNotes').value;
+            
+            localStorage.setItem('favoriteArtwork', favorite);
+            localStorage.setItem('netflixSeries', netflix);
+            localStorage.setItem('personalNotes', notes);
+            
+            // Show confirmation
+            const button = document.querySelector('.save-button');
+            const originalText = button.textContent;
+            button.textContent = '✅ Salvato!';
+            button.style.background = '#4CAF50';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+            }, 2000);
+        }
+
+        function showResetModal() {
+            document.getElementById('resetModal').classList.add('active');
+        }
+
+        function closeResetModal() {
+            document.getElementById('resetModal').classList.remove('active');
+        }
+
+        function confirmReset() {
+            localStorage.clear();
+            completedArtworks = [];
+            
+            // Reset UI
+            document.querySelectorAll('.artwork-item').forEach(artwork => {
+                artwork.classList.remove('completed', 'expanded');
+                artwork.querySelector('.checkbox').innerHTML = '';
+            });
+            
+            document.getElementById('favoriteArtwork').value = '';
+            document.getElementById('netflixSeries').value = '';
+            document.getElementById('personalNotes').value = '';
+            
+            updateStats();
+            closeResetModal();
+            
+            // Show confirmation
+            alert('✅ Tour resettato! Buon divertimento!');
+        }
+
+        function showCelebration() {
+            document.getElementById('celebration').classList.add('active');
+        }
+
+        function closeCelebration() {
+            document.getElementById('celebration').classList.remove('active');
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+            if (completedArtworks.length > 0 && completedArtworks.length < 15) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</body>
+</html>
